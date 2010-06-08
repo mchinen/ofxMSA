@@ -37,21 +37,14 @@ class ofxMSAAttraction : public ofxMSAConstraint {
 public:
 	friend class ofxMSAPhysics;
 
-	ofxMSAAttraction(ofxMSAParticle *a, ofxMSAParticle *b, float strength, float minimumDistance) {
+	ofxMSAAttraction(ofxMSAParticle *a, ofxMSAParticle *b, float strength) {
 		this->_a = a;
 		this->_b = b;
 		setStrength(strength);
-		setMinimumDistance(minimumDistance);
 
 		_type = OFX_MSA_CONSTRAINT_TYPE_ATTRACTION;
 	}
 
-	// set minimum distance before force takes affect
-	void setMinimumDistance(float d);
-	
-	// get minimum distance
-	float getMinimumDistance();
-	
 	// set strength of attraction (+ve
 	void setStrength(float newStrength);
 	
@@ -59,13 +52,11 @@ public:
 	float getStrength();
 
 protected:
-	float _minDist, _minDist2;
 	float _strength;
 
 	void solve() {
 		ofPoint delta = _b->getPosition() - _a->getPosition();
 		float deltaLength2 = msaLengthSquared(delta);
-		if(_minDist2 && deltaLength2 > _minDist2) return;
 		
 		float force = _strength * (_b->getMass()) * (_a->getMass()) / (deltaLength2 + 0.001);		// to avoid divide by zero
 		
@@ -80,16 +71,6 @@ protected:
         ofxMSAConstraint::debugDraw();
 	}
 };
-
-inline void ofxMSAAttraction::setMinimumDistance(float d) {
-	_minDist = d;
-	_minDist2 = d*d;
-}
-
-// get minimum distance
-inline float ofxMSAAttraction::getMinimumDistance() {
-	return _minDist;
-}
 
 // set strength of attraction (+ve
 inline void ofxMSAAttraction::setStrength(float newStrength) {

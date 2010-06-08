@@ -9,6 +9,7 @@ v2.5
 - use ofxMSAParticle::getX(), getY(), getZ() and getPosition() to get position
 - ofxMSAParticle::moveTo() and moveBy() takes second parameter whether to preserve velocity or not
 - all position and velocity setters only take ofPoint instead of individual x,y,z. this is for future plans of having 2D and 3D physics within the same API
+- added minimum and maximum distance to all constraints (attraction, spring, collision etc.)
 
 
 v2.1	07/04/2009

@@ -146,13 +146,13 @@ void addRandomParticle() {
 	float radius	= ofMap(mass, MIN_MASS, MAX_MASS, NODE_MIN_RADIUS, NODE_MAX_RADIUS);
 
 	// physics.makeParticle returns a particle pointer so you can customize it
-	ofxMSAParticle* p = physics.makeParticle(posX, posY, posZ);
+	ofxMSAParticle* p = physics.makeParticle(ofPoint(posX, posY, posZ));
 
 	// and set a bunch of properties (you don't have to set all of them, there are defaults)
 	p->setMass(mass)->setBounce(bounce)->setRadius(radius)->enableCollision()->makeFree();
 
 	// add an attraction to the mouseNode
-	if(mouseAttract) physics.makeAttraction(&mouseNode, p, ofRandom(MIN_ATTRACTION, MAX_ATTRACTION), 0);
+	if(mouseAttract) physics.makeAttraction(&mouseNode, p, ofRandom(MIN_ATTRACTION, MAX_ATTRACTION));
 }
 
 void addRandomSpring() {
@@ -183,7 +183,7 @@ void toggleMouseAttract() {
 	if(mouseAttract) {
 		// loop through all particles and add attraction to mouse
 		// (doesn't matter if we attach attraction from mouse-mouse cos it won't be added internally
-		for(int i=0; i<physics.numberOfParticles(); i++) physics.makeAttraction(&mouseNode, physics.getParticle(i), ofRandom(MIN_ATTRACTION, MAX_ATTRACTION), 0);
+		for(int i=0; i<physics.numberOfParticles(); i++) physics.makeAttraction(&mouseNode, physics.getParticle(i), ofRandom(MIN_ATTRACTION, MAX_ATTRACTION));
 	} else {
 		// loop through all existing attractsions and delete them
 		for(int i=0; i<physics.numberOfAttractions(); i++) physics.getAttraction(i)->kill();

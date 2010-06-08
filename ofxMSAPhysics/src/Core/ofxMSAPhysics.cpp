@@ -70,9 +70,9 @@ ofxMSASpring* ofxMSAPhysics::makeSpring(ofxMSAParticle *a, ofxMSAParticle *b, fl
 	return c;
 }
 
-ofxMSAAttraction* ofxMSAPhysics::makeAttraction(ofxMSAParticle *a, ofxMSAParticle *b, float _strength, float _minimumDistance) {
+ofxMSAAttraction* ofxMSAPhysics::makeAttraction(ofxMSAParticle *a, ofxMSAParticle *b, float _strength) {
 	if(a==b) return NULL;
-	ofxMSAAttraction* c = new ofxMSAAttraction(a, b, _strength, _minimumDistance);
+	ofxMSAAttraction* c = new ofxMSAAttraction(a, b, _strength);
 	addConstraint(c);
 	c->release();	// cos addConstraint(c) retains it
 	return c;

@@ -49,6 +49,9 @@ public:
 		verbose = true;
 		_params = NULL;
 		
+		setMinDistance(0);
+		setMaxDistance(0);
+		
 		setClassName("ofxMSAConstraint");
 	}
 
@@ -75,6 +78,19 @@ public:
 
 	void kill();
 	bool isDead();
+	
+	// set minimum distance before constraint takes affect
+	void setMinDistance(float d);
+	
+	// get minimum distance
+	float getMinDistance();
+	
+	// set maximum distance before constraint takes affect
+	void setMaxDistance(float d);
+	
+	// get maximum distance
+	float getMaxDistance();
+	
 
 	// only worth solving the constraint if its on, and at least one end is free
 	bool shouldSolve();
@@ -88,6 +104,10 @@ protected:
 	int				_type;
 	bool			_isOn;
 	bool			_isDead;
+	float			_minDist;
+	float			_minDist2;
+	float			_maxDist;
+	float			_maxDist2;
 	
 	ofxMSAParticle	*_a, *_b;
 	ofxMSAPhysicsParams *_params;
@@ -160,9 +180,46 @@ inline bool ofxMSAConstraint::isDead() {
 	return _isDead;
 }
 
+
+inline void ofxMSAConstraint::setMinDistance(float d) {
+	_minDist = d;
+	_minDist2 = d*d;
+}
+
+inline float ofxMSAConstraint::getMinDistance() {
+	return _minDist;
+}
+
+inline void ofxMSAConstraint::setMaxDistance(float d) {
+	_maxDist = d;
+	_maxDist2 = d*d;
+}
+
+inline float ofxMSAConstraint::getMaxDistance() {
+	return _maxDist;
+}
+
 // only worth solving the constraint if its on, and at least one end is free
 inline bool ofxMSAConstraint::shouldSolve() {
-	return _isOn && (_a->isFree() || _b->isFree());
+	
+	// if the constraint is off or both sides are fixed then return false
+	if(isOff() || (_a->isFixed() && _b->isFixed())) return false;	
+	
+	// if no length restrictions then return true (by this point we know above condition is false)
+	if(_minDist == 0 && _maxDist == 0) return true;
+	
+	ofPoint delta = _b->getPosition() - _a->getPosition();
+	float deltaLength2 = msaLengthSquared(delta);
+	
+	bool minDistSatisfied;
+	if(_minDist) minDistSatisfied = deltaLength2 > _minDist2;
+	else minDistSatisfied = true;
+	
+	bool maxDistSatisfied;
+	if(_maxDist) maxDistSatisfied = deltaLength2 < _maxDist2;
+	else maxDistSatisfied = true;
+	
+	return minDistSatisfied && maxDistSatisfied;
 }
 
 

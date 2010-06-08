@@ -75,7 +75,7 @@ public:
 
 	ofxMSAParticle*		makeParticle(ofPoint pos, float m = 1.0f, float d = 1.0f);
 	ofxMSASpring*		makeSpring(ofxMSAParticle *a, ofxMSAParticle *b, float _strength, float _restLength);
-	ofxMSAAttraction*	makeAttraction(ofxMSAParticle *a, ofxMSAParticle *b, float _strength, float _minimumDistance = 0);
+	ofxMSAAttraction*	makeAttraction(ofxMSAParticle *a, ofxMSAParticle *b, float _strength);
 	ofxMSACollision*	makeCollision(ofxMSAParticle *a, ofxMSAParticle *b);
 
 	// this method retains the particle, so you should release() it after adding (obj-c style)
