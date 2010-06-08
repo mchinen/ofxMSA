@@ -1,0 +1,27 @@
+<install>
+
+	<version>1.0</version>
+	<author>Mehmet Akten</author>
+	<url>code.google.com/p/ofxmsaof/</url>
+	
+    <requires>
+	</requires>
+    
+	<add>	
+		<src>
+			<folder name="addons/ofxMSATimer/src">			
+				<file>../../../addons/ofxMSATimer/src/ofxMSATimer.h</file>
+				<file>../../../addons/ofxMSATimer/src/ofxMSATimer.cpp</file>
+			</folder>
+		</src>
+
+		<include>
+			<path>../../../addons/ofxMSATimer/src</path>
+		</include>
+		
+		<link>
+		</link>
+
+	</add>
+	
+</install>
