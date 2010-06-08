@@ -50,8 +50,6 @@ ofxMSAParticle::ofxMSAParticle(ofxMSAParticle &p) {
 	setRadius(p._radius);
 }
 
-ofxMSAParticle::~ofxMSAParticle() {
-}
 
 
 void ofxMSAParticle::init(ofPoint pos, float m, float d) {

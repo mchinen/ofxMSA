@@ -48,7 +48,7 @@ public:
 		_isDead = false;
 		verbose = true;
 		_params = NULL;
-
+		
 		setClassName("ofxMSAConstraint");
 	}
 
@@ -57,55 +57,28 @@ public:
 		_b->release();
 	}
 
-	inline int type() {
-		return _type;
-	}
+	int type();
+	
+	// getOneEnd is a same as getA and getTheOtherEnd is same as getB
+	// just have both methods so you can choose whichever you please
+	ofxMSAParticle* getOneEnd();
+	ofxMSAParticle* getTheOtherEnd();
+	
+	ofxMSAParticle* getA();
+	ofxMSAParticle* getB();
 
-	inline ofxMSAParticle* getOneEnd() {
-		return _a;
-	}
+	void turnOff();
+	void turnOn();
 
-	inline ofxMSAParticle* getTheOtherEnd() {
-		return _b;
-	}
+	bool isOn();
+	bool isOff();
 
-	inline ofxMSAParticle* getA() {
-		return _a;
-	}
-
-	inline ofxMSAParticle* getB() {
-		return _b;
-	}
-
-	inline void turnOff() {
-		_isOn = false;
-	}
-
-	inline void turnOn() {
-		_isOn = true;
-	}
-
-	inline bool isOn() {
-		return (_isOn == true);
-	}
-
-	inline bool isOff(){
-		return (_isOn == false);
-	}
-
-	inline void kill() {
-		_isDead = true;
-	}
-
-	inline bool isDead() {
-		return _isDead;
-	}
+	void kill();
+	bool isDead();
 
 	// only worth solving the constraint if its on, and at least one end is free
-	inline bool shouldSolve() {
-		return _isOn && (_a->isFree() || _b->isFree());
-	}
-
+	bool shouldSolve();
+	
 	virtual void update() {}
 	virtual void draw() {}
 
@@ -115,6 +88,7 @@ protected:
 	int				_type;
 	bool			_isOn;
 	bool			_isDead;
+	
 	ofxMSAParticle	*_a, *_b;
 	ofxMSAPhysicsParams *_params;
 	virtual void solve() = 0;
@@ -141,6 +115,55 @@ protected:
 		*/
 	}
 };
+
+inline int ofxMSAConstraint::type() {
+	return _type;
+}
+
+inline ofxMSAParticle* ofxMSAConstraint::getOneEnd() {
+	return _a;
+}
+
+inline ofxMSAParticle* ofxMSAConstraint::getTheOtherEnd() {
+	return _b;
+}
+
+inline ofxMSAParticle* ofxMSAConstraint::getA() {
+	return _a;
+}
+
+inline ofxMSAParticle* ofxMSAConstraint::getB() {
+	return _b;
+}
+
+inline void ofxMSAConstraint::turnOff() {
+	_isOn = false;
+}
+
+inline void ofxMSAConstraint::turnOn() {
+	_isOn = true;
+}
+
+inline bool ofxMSAConstraint::isOn() {
+	return (_isOn == true);
+}
+
+inline bool ofxMSAConstraint::isOff(){
+	return (_isOn == false);
+}
+
+inline void ofxMSAConstraint::kill() {
+	_isDead = true;
+}
+
+inline bool ofxMSAConstraint::isDead() {
+	return _isDead;
+}
+
+// only worth solving the constraint if its on, and at least one end is free
+inline bool ofxMSAConstraint::shouldSolve() {
+	return _isOn && (_a->isFree() || _b->isFree());
+}
 
 
 

@@ -47,24 +47,16 @@ public:
 	}
 
 	// set minimum distance before force takes affect
-	inline void setMinimumDistance(float d) {
-		_minDist = d;
-		_minDist2 = d*d;
-	}
-
+	void setMinimumDistance(float d);
+	
 	// get minimum distance
-	inline float getMinimumDistance() {
-		return _minDist;
-	}
-
+	float getMinimumDistance();
+	
 	// set strength of attraction (+ve
-	inline void setStrength(float newStrength) {
-		_strength = newStrength;
-	}
-
-	inline float getStrength() {
-		return _strength;
-	}
+	void setStrength(float newStrength);
+	
+	// get strength of attraction
+	float getStrength();
 
 protected:
 	float _minDist, _minDist2;
@@ -74,21 +66,38 @@ protected:
 		ofPoint delta = _b->getPosition() - _a->getPosition();
 		float deltaLength2 = msaLengthSquared(delta);
 		if(_minDist2 && deltaLength2 > _minDist2) return;
-
+		
 		float force = _strength * (_b->getMass()) * (_a->getMass()) / (deltaLength2 + 0.001);		// to avoid divide by zero
-
+		
 		ofPoint deltaForce = delta * force;
 		
 		if (_a->isFree()) _a->moveBy(deltaForce * _a->getInvMass(), false);
 		if (_b->isFree()) _b->moveBy(deltaForce * -_b->getInvMass(), false);
 	}
 
-
     void debugDraw() {
         ofSetColor(0, 0, 255);
         ofxMSAConstraint::debugDraw();
 	}
-
-
-
 };
+
+inline void ofxMSAAttraction::setMinimumDistance(float d) {
+	_minDist = d;
+	_minDist2 = d*d;
+}
+
+// get minimum distance
+inline float ofxMSAAttraction::getMinimumDistance() {
+	return _minDist;
+}
+
+// set strength of attraction (+ve
+inline void ofxMSAAttraction::setStrength(float newStrength) {
+	_strength = newStrength;
+}
+
+inline float ofxMSAAttraction::getStrength() {
+	return _strength;
+}
+
+

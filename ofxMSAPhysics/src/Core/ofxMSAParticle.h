@@ -46,8 +46,6 @@ public:
 	ofxMSAParticle(ofPoint pos, float m = 1.0f, float d = 1.0f);
 	ofxMSAParticle(ofxMSAParticle &p);
 	
-	virtual ~ofxMSAParticle();
-
 	virtual void	init(ofPoint pos, float m = 1.0f, float d = 1.0f);
 
 	ofxMSAParticle* setMass(float t = 1);
