@@ -53,7 +53,7 @@ public:
 protected:
 	void solve() {
 		// problems with binning!
-//		if(_params->doWorldEdges && !_a->isInSameBinAs(_b)) return; // if world edges have been set, check to see if particles are in same bin
+		if(_params->doWorldEdges && !_a->isInSameBinAs(_b)) return; // if world edges have been set, check to see if particles are in same bin
 
 		float restLength = _b->getRadius() + _a->getRadius();
 		ofPoint delta = _b->getPosition() - _a->getPosition();
