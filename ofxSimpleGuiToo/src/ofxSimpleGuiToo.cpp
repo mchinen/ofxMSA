@@ -189,23 +189,23 @@ void ofxSimpleGuiToo::draw() {
 	ofSetColor(config->borderColor);
 	if(alignRight) ofLine(ofGetWidth() - headerPage->width, headerPage->height, headerPage->width, headerPage->height);
 	else ofLine(0, headerPage->height, headerPage->width, headerPage->height);
-	pages[currentPage]->draw(0.0f, headerPage->height, alignRight);
+	pages[currentPageIndex]->draw(0.0f, headerPage->height, alignRight);
 	
 	ofPopStyle();
 }
 
 
 void ofxSimpleGuiToo::nextPage() {
-	setPage(currentPage + 1);
+	setPage(currentPageIndex + 1);
 }
 void ofxSimpleGuiToo::prevPage() {
-	setPage(currentPage - 1);
+	setPage(currentPageIndex - 1);
 }
 
 void ofxSimpleGuiToo::nextPageWithBlank() {
 	if(doDraw) {
-		setPage(currentPage + 1);
-		if(currentPage == 1) setDraw(false);
+		setPage(currentPageIndex + 1);
+		if(currentPageIndex == 1) setDraw(false);
 	} else {
 		setDraw(true);
 		setPage(1);
@@ -215,11 +215,11 @@ void ofxSimpleGuiToo::nextPageWithBlank() {
 
 
 void ofxSimpleGuiToo::setPage(int i) {
-	currentPage = i;
-	if(currentPage >= pages.size()) currentPage = 1;
-	else if(currentPage < 1) currentPage = pages.size()-1;
+	currentPageIndex = i;
+	if(currentPageIndex >= pages.size()) currentPageIndex = 1;
+	else if(currentPageIndex < 1) currentPageIndex = pages.size()-1;
 	
-	if(titleButton) titleButton->setName(ofToString(currentPage) + ": " + pages[currentPage]->name);
+	if(titleButton) titleButton->setName(ofToString(currentPageIndex) + ": " + pages[currentPageIndex]->name);
 }
 
 
@@ -234,23 +234,25 @@ void ofxSimpleGuiToo::setPage(string name) {
 }
 
 
-ofxSimpleGuiPage &ofxSimpleGuiToo::page(int i) {
+ofxSimpleGuiPage& ofxSimpleGuiToo::page(int i) {
 	return *pages.at(i);
 }
 
-ofxSimpleGuiPage &ofxSimpleGuiToo::page(string name) {
+ofxSimpleGuiPage& ofxSimpleGuiToo::page(string name) {
 	if(!config) setup();
-
-//	ofxSimpleGuiPage *page;
 	for(int i=1; i<pages.size(); i++) if(name.compare(pages[i]->name) == 0) return *pages[i];
-//	return NULL;
 }
 
 
+ofxSimpleGuiPage& ofxSimpleGuiToo::currentPage() {
+	return page(currentPageIndex);
+}
 
 vector <ofxSimpleGuiPage*>&	ofxSimpleGuiToo::getPages() {
 	return pages;
 }
+
+
 
 ofxSimpleGuiPage &ofxSimpleGuiToo::addPage(string name) {
 	if(!config) setup();
@@ -265,75 +267,75 @@ ofxSimpleGuiPage &ofxSimpleGuiToo::addPage(string name) {
 	return *newPage;
 }
 
-ofxSimpleGuiControl *ofxSimpleGuiToo::getControlByName(string name) {
+ofxSimpleGuiControl &ofxSimpleGuiToo::control(string name) {
 	for(int i = 0; i < pages.size(); i++) {
 		for(int j = 0; j < pages[i]->getControls().size(); j++) {
 			if(name==pages[i]->getControls()[j]->name) {
-				return pages[i]->getControls()[j];
+				return *pages[i]->getControls()[j];
 			}
 		}
 	}
-	return NULL;
+//	return NULL;
 }
 
 
 ofxSimpleGuiControl &ofxSimpleGuiToo::addControl(ofxSimpleGuiControl& control) {
 	if(!config) setup();
-	return pages[currentPage]->addControl(control);
+	return pages[currentPageIndex]->addControl(control);
 }
 
 ofxSimpleGuiButton &ofxSimpleGuiToo::addButton(string name, bool &value) {
 	if(!config) setup();
-	return pages[currentPage]->addButton(name, value);
+	return pages[currentPageIndex]->addButton(name, value);
 }
 
 ofxSimpleGuiContent &ofxSimpleGuiToo::addContent(string name, ofBaseDraws &content, float fixwidth) {
 	if(!config) setup();
-	return pages[currentPage]->addContent(name, content, fixwidth);
+	return pages[currentPageIndex]->addContent(name, content, fixwidth);
 }
 
 ofxSimpleGuiFPSCounter &ofxSimpleGuiToo::addFPSCounter() {
 	if(!config) setup();
-	return pages[currentPage]->addFPSCounter();
+	return pages[currentPageIndex]->addFPSCounter();
 }
 
 ofxSimpleGuiQuadWarp &ofxSimpleGuiToo::addQuadWarper(string name, ofBaseDraws &baseDraw, ofPoint *pts) {
-	return pages[currentPage]->addQuadWarper(name, baseDraw, pts);
+	return pages[currentPageIndex]->addQuadWarper(name, baseDraw, pts);
 }
 //
 //ofxSimpleGuiMovieSlider &ofxSimpleGuiToo::addMovieSlider(string name, ofVideoPlayer& input) {
-//	return pages[currentPage]->addMovieSlider(name, input);
+//	return pages[currentPageIndex]->addMovieSlider(name, input);
 //}
 
 ofxSimpleGuiSliderInt &ofxSimpleGuiToo::addSlider(string name, int &value, int min, int max) {
 	if(!config) setup();
-	return pages[currentPage]->addSlider(name, value, min, max);
+	return pages[currentPageIndex]->addSlider(name, value, min, max);
 }
 
 ofxSimpleGuiSliderFloat &ofxSimpleGuiToo::addSlider(string name, float &value, float min, float max, float smoothing) {
 	if(!config) setup();
-	return pages[currentPage]->addSlider(name, value, min, max, smoothing);
+	return pages[currentPageIndex]->addSlider(name, value, min, max, smoothing);
 }
 
 ofxSimpleGuiSlider2d &ofxSimpleGuiToo::addSlider2d(string name, ofPoint& value, float xmin, float xmax, float ymin, float ymax) {
 	if(!config) setup();
-	return pages[currentPage]->addSlider2d(name, value, xmin, xmax, ymin, ymax);
+	return pages[currentPageIndex]->addSlider2d(name, value, xmin, xmax, ymin, ymax);
 }
 
 ofxSimpleGuiTitle &ofxSimpleGuiToo::addTitle(string name, float height) {
 	if(!config) setup();
-	return pages[currentPage]->addTitle(name, height);
+	return pages[currentPageIndex]->addTitle(name, height);
 }
 
 ofxSimpleGuiToggle &ofxSimpleGuiToo::addToggle(string name, bool &value) {
 	if(!config) setup();
-	return pages[currentPage]->addToggle(name, value);
+	return pages[currentPageIndex]->addToggle(name, value);
 }
 
 
 ofxSimpleGuiColorPicker &ofxSimpleGuiToo::addColorPicker(string name, float *values) {
 	if(!config) setup();
-	return pages[currentPage]->addColorPicker(name, values);
+	return pages[currentPageIndex]->addColorPicker(name, values);
 }
 
 
@@ -346,8 +348,8 @@ void ofxSimpleGuiToo::update(ofEventArgs &e) {
 	}
 
 	headerPage->update(e);
-	pages[currentPage]->height = ofGetHeight();
-	pages[currentPage]->update(e);
+	pages[currentPageIndex]->height = ofGetHeight();
+	pages[currentPageIndex]->update(e);
 
 
 //	if(doSaveBackup) doSave = true;
@@ -359,22 +361,22 @@ void ofxSimpleGuiToo::update(ofEventArgs &e) {
 
 void ofxSimpleGuiToo::mouseMoved(ofMouseEventArgs &e) {
 	headerPage->mouseMoved(e);
-	pages[currentPage]->mouseMoved(e);
+	pages[currentPageIndex]->mouseMoved(e);
 }
 
 void ofxSimpleGuiToo::mousePressed(ofMouseEventArgs &e) {
 	headerPage->mousePressed(e);
-	pages[currentPage]->mousePressed(e);
+	pages[currentPageIndex]->mousePressed(e);
 }
 
 void ofxSimpleGuiToo::mouseDragged(ofMouseEventArgs &e) {
 	headerPage->mouseDragged(e);
-	pages[currentPage]->mouseDragged(e);
+	pages[currentPageIndex]->mouseDragged(e);
 }
 
 void ofxSimpleGuiToo::mouseReleased(ofMouseEventArgs &e) {
 	headerPage->mouseReleased(e);
-	pages[currentPage]->mouseReleased(e);
+	pages[currentPageIndex]->mouseReleased(e);
 //	if(doAutoSave) doSave = true;
 	if(doAutoSave) saveToXML();
 }
@@ -396,14 +398,14 @@ void ofxSimpleGuiToo::keyPressed(ofKeyEventArgs &e) {
 	
 	if(doDraw) {
 		headerPage->keyPressed(e);
-		pages[currentPage]->keyPressed(e);
+		pages[currentPageIndex]->keyPressed(e);
 	}
 	
 }
 
 void ofxSimpleGuiToo::keyReleased(ofKeyEventArgs &e) {
 	headerPage->keyReleased(e);
-	pages[currentPage]->keyReleased(e);
+	pages[currentPageIndex]->keyReleased(e);
 }
 
 /*

@@ -40,14 +40,8 @@
 
 #include "ofxSimpleGuiIncludes.h"
 
-#ifdef __OFXWEBSERVER__
-#include "ofxSimpleGuiTooWebService.h"
-#endif
-
-//#define	OFX_SIMPLEGUITOO_XML_NAME	"ofxSimpleGuiToo.xml"
 
 class ofxSimpleGuiToo {
-
 	
 public:
 	int							guiFocus;
@@ -55,38 +49,42 @@ public:
 	ofxSimpleGuiConfig			*config;	
 	
 	ofxSimpleGuiToo();
-	void					setup();
+	void						setup();
 	
 	
-//	void					loadFromXML(string file = OFX_SIMPLEGUITOO_XML_NAME);
-	void					loadFromXML();
-	void					saveToXML();	
-	void					setAutoSave(bool b);
-	void					setAlignRight(bool b);
-	void					setDefaultKeys(bool b);
+	void						loadFromXML();
+	void						saveToXML();	
+	void						setAutoSave(bool b);
+	void						setAlignRight(bool b);
+	void						setDefaultKeys(bool b);
 	
 //	int		getValueI(string nameID);
 //	float	getValueF(string nameID);
 //	bool	getValueB(string nameID);
 	
-	void					drawFocus(float x, float y);
+	void						drawFocus(float x, float y);
 
 	
-	void					setDraw(bool b);
-	void					toggleDraw();
-	void					show();		// simply calls setDraw(true);
-	void					hide();		// simply calls setDraw(false);
-	bool					isOn();
+	void						setDraw(bool b);
+	void						toggleDraw();
+	void						show();		// simply calls setDraw(true);
+	void						hide();		// simply calls setDraw(false);
+	bool						isOn();
 	
-	void					nextPage();
-	void					prevPage();
-	void					setPage(int i);				// 1 based index of page
-	void					setPage(string name);
+	void						nextPage();
+	void						prevPage();
+	void						setPage(int i);				// 1 based index of page
+	void						setPage(string name);
 	
-	void					nextPageWithBlank();		// cycles through pages, and closes after last page
+	void						nextPageWithBlank();		// cycles through pages, and closes after last page
 	
-	ofxSimpleGuiPage		&page(int i);				// 1 based index of page
-	ofxSimpleGuiPage		&page(string name);
+	ofxSimpleGuiPage&			page(int i);				// 1 based index of page
+	ofxSimpleGuiPage&			page(string name);			// returns page by name
+	ofxSimpleGuiPage&			currentPage();				// returns current page
+	vector <ofxSimpleGuiPage*>&	getPages();
+	
+	ofxSimpleGuiControl			&control(string name);		// returns control by name
+
 	
 	ofxSimpleGuiPage			&addPage(string name = "");
 	ofxSimpleGuiControl			&addControl(ofxSimpleGuiControl& control);
@@ -102,18 +100,8 @@ public:
 	ofxSimpleGuiToggle			&addToggle(string name, bool &value);
 	ofxSimpleGuiColorPicker		&addColorPicker(string name, float *values);
 
-	void					draw();
-	
-	
-	
-	vector <ofxSimpleGuiPage*>&		getPages();
-	ofxSimpleGuiControl *getControlByName(string name);
 
-#ifdef __OFXWEBSERVER__
-	ofxSimpleGuiTooWebService		webService;
-#endif	
-	
-	
+	void						draw();
 	
 protected:
 	bool							doAutoSave;
@@ -121,7 +109,7 @@ protected:
 	bool							doDefaultKeys;
 	bool							doSave;//, doSaveBackup;
 	bool							changePage;
-	int								currentPage;			// 1 based index of page (0 is for global controls)
+	int								currentPageIndex;			// 1 based index of page (0 is for global controls)
 	
 //	ofxXmlSettings					XML;
 //	string							xmlFilename;

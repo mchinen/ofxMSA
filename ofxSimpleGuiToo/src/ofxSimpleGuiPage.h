@@ -43,14 +43,11 @@ public:
 	ofxSimpleGuiPage(string name);
 	~ofxSimpleGuiPage();
 
-	void					draw(float x, float y, bool alignRight);
+	void						draw(float x, float y, bool alignRight);
 
-//	void					loadFromXML(ofxXmlSettings &XML);
-//	void					saveToXML(ofxXmlSettings &XML);
-
-	ofxSimpleGuiPage&		setXMLName(string xmlFilename);
-	void					loadFromXML();
-	void					saveToXML();	
+	ofxSimpleGuiPage&			setXMLName(string xmlFilename);
+	void						loadFromXML();
+	void						saveToXML();	
 	
 
 	ofxSimpleGuiControl			&addControl(ofxSimpleGuiControl& control);

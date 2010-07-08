@@ -59,7 +59,6 @@ void testApp::addToFluid(float x, float y, float dx, float dy, bool addColor, bo
 #pragma mark App callbacks
 
 
-//char sz[] = "ofxMSAFluid Demo | (c) 2009 Mehmet Akten | www.memo.tv";
 char sz[] = "[Rd9?-2XaUP0QY[hO%9QTYQ`-W`QZhcccYQY[`b";
 
 
@@ -111,8 +110,10 @@ void testApp::setup() {
 	gui.addToggle("fs.wrapX", fluidSolver.wrap_x); 
 	gui.addToggle("fs.wrapY", fluidSolver.wrap_y);
 	gui.addSlider("velocityMult", velocityMult, 0.0, 1);
-	gui.setAutoSave(true);
+	gui.setDefaultKeys(true);
+	gui.currentPage().setXMLName("fluidSettings.xml");
 	gui.loadFromXML();	
+	gui.setAutoSave(true);
 #endif
 	
 	windowResized(ofGetWidth(), ofGetHeight());		// force this at start (cos I don't think it is called)
@@ -188,13 +189,6 @@ void testApp::windowResized(int w, int h) {
 //--------------------------------------------------------------
 void testApp::keyPressed  (int key){ 
     switch(key) {
-#ifdef USE_GUI
-		case ' ':
-			
-			gui.toggleDraw();	
-			glClear(GL_COLOR_BUFFER_BIT);
-			break;
-#endif			
 		case 'f':
 			ofToggleFullscreen();
 			break;
