@@ -1,0 +1,65 @@
+A collection of C++ libraries / utilities, primarily for openFrameworks.
+
+MSATimer
+-------------------------
+A class to keep track of ultra high resolution time on posix systems using mach_absolute_time
+
+
+ofxMSABulletPhysics
+-------------------------
+A simple to use C++ wrapper for the bullet physics engine. See the provided example for usage. Not all functionality is wrapped, but you have access to underlying bullet objects so you can still do everything you want by combining the wrappers and underlying bullet objects.
+
+
+ofxMSAFluid
+-------------------------
+C++ classes for solving and drawing 2D fluid systems based on Jos Stam's methods and code.
+http://www.msavisuals.com/msafluid
+
+
+ofxMSAInteractiveObject
+-------------------------
+A C++ class which wraps up some poco functionality to make flash-like objects which auto updates/draws and adds mouse methods like onRollOver, onPress, OnRollout? etc with bounds checking with easy to remember functions to register/un-register callbacks.
+
+
+ofxMSAPhysics v2
+-------------------------
+A C++ 3D particle/constraint based physics library for openFrameworks. It uses a very similar api to the traer.physics library for processing to make getting into it as easy as possible. v2 now has collision, more flexible constraints and many more improvements.
+http://www.msavisuals.com/msaphysics
+
+
+ofxMSAShape3D
+-------------------------
+A C++ wrapper for Vertex Arrays & Vertex Buffer Objects to allow Immediate mode style syntax on embedded systems / iPhone etc.
+http://www.msavisuals.com/msashape3d
+
+
+ofxMSASpline
+-------------------------
+A set of C++ template classes for doing various types of interpolations on data with any number of dimensions. You can feed the system an arbitrary number of data, then resample at any resolution, or ask for the value at any percentage along the data - or just draw it - including splines in 3D. This is useful for creating and drawing splines (in any dimensions), or creating smooth animation paths from keyframes (again, in any dimensions).
+http://www.msavisuals.com/msaspline
+
+
+ofxMSAThreadedImageSaver
+-------------------------
+An extension to ofImage which takes a screengrab and saves the file in a separate thread so it can encode and save the file without interrupting the app.
+
+
+ofxMSAUtils
+-------------------------
+A collection of small and useful utility C++ classes and functions. An advanced color class (with RGB / HSV conversion), Perlin noise, draw quads, basic tweeanble parameters, easily manage a folder full of images, check the md5 hash of files etc.
+
+
+ofxObjCPointer
+-------------------------
+A simple ObjectiveC style Smart Pointer for C++ which keeps reference count and frees memory when reference count is zero. This is accomplished by providing retain/release methods similar to Objective C.
+
+
+ofxOpenCL
+-------------------------
+A simple to use C++ wrapper for OpenCL. 
+Example of it in action (1M particles @ 100-200 fps) http://vimeo.com/7332496
+
+
+ofxSimpleGuiToo
+-------------------------
+A simple and very quick to setup GUI based on Todd Vanderlin's ofxSimpleGui. It uses a very similar (almost identical) API, but with a rewritten backend.
