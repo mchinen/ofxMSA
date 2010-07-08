@@ -48,6 +48,8 @@ void msaDumpFPS(float seconds);
 
 void msaSetCursor(bool forceOn = false);
 
+void msaCreateDir(string fullpath);
+
 void msaConstrain(float &pos, float &vel, float min, float max, float bounce = 1);
 void msaConstrain(ofPoint &pos, ofPoint &vel, ofPoint &min, ofPoint &max, float bounce = 1);
 

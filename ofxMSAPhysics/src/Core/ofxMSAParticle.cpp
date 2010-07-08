@@ -32,7 +32,6 @@
 
 #include "ofxMSAParticle.h"
 #include "ofxMSAPhysics.h"
-#include "binner.h"
 
 ofxMSAParticle::ofxMSAParticle() {
 	init(ofPoint());
@@ -61,28 +60,27 @@ void ofxMSAParticle::init(ofPoint pos, float m, float d) {
 	setDrag(d);
 	setBounce();
 	setRadius();
-	disableCollision();
+	enableCollision();
 	makeFree();
 	_isDead = false;
 	_age = 0;
 	verbose = true;
+	data = NULL;
 	setClassName("ofxMSAParticle");
 }
 
 ofxMSAParticle* ofxMSAParticle::enableCollision(){
-	_globalCollisionEnabled = true;
-	if(_physics) _physics->addToCollision(this);
+	_collisionEnabled = true;
 	return this;
 }
 
 ofxMSAParticle* ofxMSAParticle::disableCollision() {
-	_globalCollisionEnabled = false;
-	if(_physics) _physics->removeFromCollision(this);
+	_collisionEnabled = false;
 	return this;
 }
 
 bool ofxMSAParticle::hasCollision() {
-	return _globalCollisionEnabled;
+	return _collisionEnabled;
 }
 
 
@@ -103,15 +101,6 @@ void ofxMSAParticle::doVerlet() {
 	}
 }
 
-bool ofxMSAParticle::isInSameBinAs(ofxMSAParticle* p) {
-	return (_xBinFlags & p->_xBinFlags) && (_yBinFlags & p->_yBinFlags) && (_zBinFlags & p->_zBinFlags);
-}
-
-
-void ofxMSAParticle::computeBinFlags() {
-//	computeBinPosition(x, y, z, &_xBinFlags, &_yBinFlags, &_zBinFlags);
-	computeBinPosition(_pos, &_xBinFlags, &_yBinFlags, &_zBinFlags);
-}
 
 
 void ofxMSAParticle::checkWorldEdges() {

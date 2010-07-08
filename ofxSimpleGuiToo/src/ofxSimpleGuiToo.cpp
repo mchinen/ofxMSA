@@ -247,6 +247,11 @@ ofxSimpleGuiPage &ofxSimpleGuiToo::page(string name) {
 }
 
 
+
+vector <ofxSimpleGuiPage*>&	ofxSimpleGuiToo::getPages() {
+	return pages;
+}
+
 ofxSimpleGuiPage &ofxSimpleGuiToo::addPage(string name) {
 	if(!config) setup();
 
@@ -258,6 +263,17 @@ ofxSimpleGuiPage &ofxSimpleGuiToo::addPage(string name) {
 //	if(pages.size() > 1) newPage->addTitle(newPage->name);		// if this isn't the first page, add to header
 	setPage(pages.size() - 1);
 	return *newPage;
+}
+
+ofxSimpleGuiControl *ofxSimpleGuiToo::getControlByName(string name) {
+	for(int i = 0; i < pages.size(); i++) {
+		for(int j = 0; j < pages[i]->getControls().size(); j++) {
+			if(name==pages[i]->getControls()[j]->name) {
+				return pages[i]->getControls()[j];
+			}
+		}
+	}
+	return NULL;
 }
 
 

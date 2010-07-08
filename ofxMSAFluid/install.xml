@@ -1,0 +1,31 @@
+<install>
+
+	<version>1.2</version>
+	<author>Mehmet Akten</author>
+	<url>www.msavisuals.com/msafluid</url>
+	
+    <requires>
+	</requires>
+    
+	<add>	
+		<src>
+			<folder name="addons/ofxMSAFluid/src">			
+				<file>../../../addons/ofxMSAFluid/src/ofxMSAFluid.h</file>
+				<file>../../../addons/ofxMSAFluid/src/ofxMSAFluidDrawer.h</file>
+				<file>../../../addons/ofxMSAFluid/src/ofxMSAFluidDrawer.cpp</file>
+				<file>../../../addons/ofxMSAFluid/src/ofxMSAFluidSolver.h</file>
+				<file>../../../addons/ofxMSAFluid/src/ofxMSAFluidSolver.cpp</file>
+				<file>../../../addons/ofxMSAFluid/src/ofxMSAFluidParticleUpdater.h</file>
+			</folder>
+		</src>
+
+		<include>
+			<path>../../../addons/ofxMSAFluid/src</path>
+		</include>
+		
+		<link>
+		</link>
+
+	</add>
+	
+</install>

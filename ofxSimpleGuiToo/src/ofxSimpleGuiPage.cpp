@@ -233,3 +233,8 @@ void ofxSimpleGuiPage::keyReleased(ofKeyEventArgs &e) {
 	for(int i=0; i<controls.size(); i++) controls[i]->_keyReleased(e);
 }
 
+
+vector <ofxSimpleGuiControl*>&	ofxSimpleGuiPage::getControls() {
+	return controls;
+}
+

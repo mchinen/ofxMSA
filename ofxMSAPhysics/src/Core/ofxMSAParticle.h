@@ -61,7 +61,7 @@ public:
 	ofxMSAParticle* setRadius(float t = 15);
 	float			getRadius();
 
-	// even with collision disabled you can still create your own collision constraint between two particles
+	// collision methods
 	ofxMSAParticle* enableCollision();
 	ofxMSAParticle* disableCollision();
 	bool			hasCollision();
@@ -92,8 +92,9 @@ public:
 
 	void			kill();
 	bool			isDead();
-
-	bool			isInSameBinAs(ofxMSAParticle* p);
+	
+	// custom void* which you can use to store any kind of custom data
+	void			*data;
 
 	ofxMSAPhysicsParams *getParams();
 
@@ -110,10 +111,8 @@ protected:
 	float			_age;
 	bool			_isDead;
 	bool			_isFixed;
-	bool			_globalCollisionEnabled;
-	unsigned int	_xBinFlags, _yBinFlags, _zBinFlags;
+	bool			_collisionEnabled;
 
-	void			computeBinFlags();
 	void			doVerlet();
 	void			checkWorldEdges();
 

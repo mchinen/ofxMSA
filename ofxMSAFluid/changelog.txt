@@ -1,0 +1,28 @@
+ofxMSAFluid changelog
+
+v1.2	02/05/2009
+--------------------
+- unified API with processing.org version
+- solver u, v, r, g, b arrays now public
+- drawer can incDrawMode and decDrawMode
+- loads of optimizations by Maa (http://www.lagraine.com/ - new content coming soon)
+
+
+v1.1	07/04/2009
+--------------------
+- changed license to revised BSD (a lot more more permissive than GPL)
+
+
+v1.0
+--------------------
+- added RGB or monochrome functionality (enableRGB())
+- vector drawing implemented
+- get and set info much improved
+- added draw mode system
+- setup() now only takes dimensions, other parameters have their own setters
+
+
+
+v0.9	04/12/08
+--------------------
+- initial version

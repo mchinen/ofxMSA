@@ -46,9 +46,9 @@ struct ofxMSAPhysicsParams {
 
 	// do world boundaries
 	bool		doWorldEdges;
-	ofPoint		worldMin;					// use for binning
+	ofPoint		worldMin;					// use for sectors
 	ofPoint		worldMax;
 	ofPoint     worldSize;                  // cache these
 	ofPoint     worldSizeInv;
-	ofPoint		binSize;
+	ofPoint		sectorCount;				// number of sectors in each axis
 };

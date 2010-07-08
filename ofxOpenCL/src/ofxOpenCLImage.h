@@ -48,7 +48,7 @@
 #include "ofxOpenCLMemoryObject.h"
 
 
-class ofxOpenCLImage : public ofxOpenCLMemoryObject {
+class ofxOpenCLImage : public ofxOpenCLMemoryObject, public ofBaseDraws {
 public:
 	
 	ofxOpenCLImage();
@@ -122,18 +122,18 @@ public:
 	// this may be NULL if no ofTexture was setup
 	// this may not be up-to-date...
 	// ...need to make sure the openCL kernels are finished with ofxOpenCL::finish() or sync with cl_events
-	void draw(int x, int y);
-	void draw(int x, int y, int w, int h);
+	void draw(float x, float y);
+	void draw(float x, float y, float w, float h);
 	
 
 	void reset();
 	
 	
-	int getWidth() {
+	float getWidth() {
 		return width;
 	}
 	
-	int getHeight() {
+	float getHeight() {
 		return height;
 	}
 	

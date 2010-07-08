@@ -30,17 +30,16 @@
  * ***********************************************************************/
 
 #include "ofxMSAPhysics.h"
-#include "binner.h"
 
 ofxMSAPhysics::ofxMSAPhysics() {
 	verbose = false;
 	setTimeStep(0.000010);
 	setDrag();
 	setNumIterations();
-	enableCollision();
-	setCollisionBinSize(10);
+	disableCollision();
 	setGravity();
 	clearWorldSize();
+	setSectorCount(0);
 
 #ifdef MSAPHYSICS_USE_RECORDER
 	_frameCounter = 0;
@@ -78,16 +77,6 @@ ofxMSAAttraction* ofxMSAPhysics::makeAttraction(ofxMSAParticle *a, ofxMSAParticl
 	return c;
 }
 
-ofxMSACollision* ofxMSAPhysics::makeCollision(ofxMSAParticle *a, ofxMSAParticle *b) {
-	if(a==b) return NULL;
-	if(getConstraint(a, b, OFX_MSA_CONSTRAINT_TYPE_COLLISION) != NULL) return NULL;
-	ofxMSACollision* c = new ofxMSACollision(a, b);
-	addConstraint(c);
-	c->release();	// cos addConstraint(c) retains it
-	return c;
-}
-
-
 
 
 ofxMSAParticle* ofxMSAPhysics::addParticle(ofxMSAParticle *p) {
@@ -96,7 +85,6 @@ ofxMSAParticle* ofxMSAPhysics::addParticle(ofxMSAParticle *p) {
 	p->setInstanceName(string("particle ") + ofToString(_particles.size(), 0));
 	p->_params = &params;
 	p->_physics = this;
-	if(isCollisionEnabled()) p->enableCollision();
 
 #ifdef MSAPHYSICS_USE_RECORDER
 	if(_replayMode == OFX_MSA_DATA_SAVE)
@@ -127,10 +115,6 @@ ofxMSAConstraint* ofxMSAPhysics::addConstraint(ofxMSAConstraint *c) {
 		case OFX_MSA_CONSTRAINT_TYPE_ATTRACTION:
 			c->setInstanceName(string("attraction ") + ofToString(_constraints[OFX_MSA_CONSTRAINT_TYPE_ATTRACTION].size(), 0));
 			break;
-
-		case OFX_MSA_CONSTRAINT_TYPE_COLLISION:
-			c->setInstanceName(string("collision ") + ofToString(_constraints[OFX_MSA_CONSTRAINT_TYPE_COLLISION].size(), 0));
-			break;
 	}
 
 	return c;
@@ -153,11 +137,6 @@ ofxMSAAttraction*	ofxMSAPhysics::getAttraction(uint i) {
 	return i < numberOfAttractions() ? (ofxMSAAttraction*)_constraints[OFX_MSA_CONSTRAINT_TYPE_ATTRACTION][i] : NULL;
 }
 
-ofxMSACollision*	ofxMSAPhysics::getCollision(uint i) {
-	return i < numberOfCollisions() ? (ofxMSACollision*)_constraints[OFX_MSA_CONSTRAINT_TYPE_COLLISION][i] : NULL;
-}
-
-
 
 uint ofxMSAPhysics::numberOfParticles() {
 	return _particles.size();
@@ -174,68 +153,6 @@ uint ofxMSAPhysics::numberOfSprings() {
 uint ofxMSAPhysics::numberOfAttractions() {
 	return _constraints[OFX_MSA_CONSTRAINT_TYPE_ATTRACTION].size();
 }
-
-
-uint ofxMSAPhysics::numberOfCollisions() {
-	return _constraints[OFX_MSA_CONSTRAINT_TYPE_COLLISION].size();
-}
-
-
-ofxMSAPhysics* ofxMSAPhysics::enableCollision() {
-	params.isCollisionEnabled = true;
-	return this;
-}
-
-ofxMSAPhysics* ofxMSAPhysics::disableCollision() {
-	params.isCollisionEnabled = false;
-	return this;
-}
-
-bool ofxMSAPhysics::isCollisionEnabled() {
-	return params.isCollisionEnabled;
-}
-
-
-ofxMSAPhysics* ofxMSAPhysics::setCollisionBinSize(float f) {
-	setCollisionBinSize(ofPoint(f, f, f));
-	return this;
-}
-
-
-ofxMSAPhysics* ofxMSAPhysics::setCollisionBinSize(ofPoint p) {
-	params.binSize = p;
-	setupBins(params.worldMin, params.worldMax, params.binSize);
-	return this;
-}
-
-ofxMSAPhysics* ofxMSAPhysics::setCollisionBinCount(float f) {
-    setCollisionBinCount(ofPoint(f, f, f));
-    return this;
-}
-
-ofxMSAPhysics* ofxMSAPhysics::setCollisionBinCount(ofPoint p) {
-    setCollisionBinSize(params.worldSize/ p);
-    return this;
-}
-
-
-ofxMSAPhysics* ofxMSAPhysics::addToCollision(ofxMSAParticle* p) {
-	for(int i=0; i< numberOfParticles(); i++) {
-		ofxMSAParticle *target = getParticle(i);
-		if(target->hasCollision()) makeCollision(target, p);
-	}
-	return this;
-}
-
-
-ofxMSAPhysics* ofxMSAPhysics::removeFromCollision(ofxMSAParticle* p) {
-	for(int i=0; i<numberOfCollisions(); i++) {
-		ofxMSAConstraint *c = getCollision(i);
-		if(c->_a == p || c->_b == p) c->kill();
-	}
-	return this;
-}
-
 
 
 ofxMSAPhysics*  ofxMSAPhysics::setDrag(float drag) {
@@ -271,14 +188,16 @@ ofxMSAPhysics*  ofxMSAPhysics::setNumIterations(float numIterations) {
 
 
 ofxMSAPhysics* ofxMSAPhysics::setWorldMin(ofPoint worldMin) {
-	params.worldMin = worldMin;
-	updateWorldSize();
+	params.worldMin		= worldMin;
+	params.worldSize	= params.worldMax - params.worldMin;
+	params.doWorldEdges	= true;
 	return this;
 }
 
 ofxMSAPhysics* ofxMSAPhysics::setWorldMax(ofPoint worldMax) {
-	params.worldMax = worldMax;
-	updateWorldSize();
+	params.worldMax		= worldMax;
+	params.worldSize	= params.worldMax - params.worldMin;
+	params.doWorldEdges = true;
 	return this;
 }
 
@@ -290,17 +209,58 @@ ofxMSAPhysics* ofxMSAPhysics::setWorldSize(ofPoint worldMin, ofPoint worldMax) {
 
 ofxMSAPhysics* ofxMSAPhysics::clearWorldSize() {
 	params.doWorldEdges = false;
+	disableCollision();
 	return this;
 }
 
 
-void ofxMSAPhysics::updateWorldSize() {
-    params.doWorldEdges = true;
-    params.worldSize = params.worldMax - params.worldMin;
-    params.worldSizeInv = ofPoint(1, 1, 1)/params.worldSize;
-    setCollisionBinCount(ofPoint(10, 10, 10));
-    setupBins(params.worldMin, params.worldMax, params.binSize);
+
+ofxMSAPhysics* ofxMSAPhysics::enableCollision() {
+	params.isCollisionEnabled = true;
+	return this;
 }
+
+ofxMSAPhysics* ofxMSAPhysics::disableCollision() {
+	params.isCollisionEnabled = false;
+	return this;
+}
+
+bool ofxMSAPhysics::isCollisionEnabled() {
+	return params.isCollisionEnabled;
+}
+
+
+
+ofxMSAPhysics* ofxMSAPhysics::setSectorCount(int count) {
+    setSectorCount(ofPoint(count, count, count));
+    return this;
+}
+
+ofxMSAPhysics* ofxMSAPhysics::setSectorCount(ofPoint vCount) {
+	if(vCount.x <= 0) vCount.x = 1;
+	if(vCount.y <= 0) vCount.y = 1;
+	if(vCount.z <= 0) vCount.z = 1;
+	
+	params.sectorCount = vCount;
+	
+//	params.sectorCount.x = 1 << (int)vPow.x;
+//	params.sectorCount.y = 1 << (int)vPow.y;
+//	params.sectorCount.z = 1 << (int)vPow.z;
+	
+//	ofPoint sectorSize = params.worldSize / sectorCount;
+	
+	_sectors.clear();
+	int numSectors = params.sectorCount.x * params.sectorCount.y * params.sectorCount.z;
+	for(int i=0; i<numSectors; i++) {
+		_sectors.push_back(ofxMSAPhysicsSector());
+	}
+//	_sectors.reserve(params.sectorCount.x * params.sectorCount.y * params.sectorCount.z);
+	
+    return this;
+}
+
+
+
 
 
 ofxMSAPhysics*  ofxMSAPhysics::setParticleCount(uint i) {
@@ -325,11 +285,6 @@ ofxMSAPhysics* ofxMSAPhysics::setSpringCount(uint i){
 
 ofxMSAPhysics* ofxMSAPhysics::setAttractionCount(uint i){
 	_constraints[OFX_MSA_CONSTRAINT_TYPE_ATTRACTION].reserve(i);
-	return this;
-}
-
-ofxMSAPhysics* ofxMSAPhysics::setCollisionCount(uint i){
-	_constraints[OFX_MSA_CONSTRAINT_TYPE_COLLISION].reserve(i);
 	return this;
 }
 
@@ -362,13 +317,15 @@ void ofxMSAPhysics::update(int frameNum) {
 		load(frameNum);
 	} else {
 		updateParticles();
-		updateAllConstraints();
+		updateConstraints();
+		if(isCollisionEnabled()) checkAllCollisions();
 		if(_replayMode == OFX_MSA_DATA_SAVE) _recorder.save(frameNum);
 	}
 	_frameCounter++;
 #else
 	updateParticles();
-	updateAllConstraints();
+	updateConstraints();
+	if(isCollisionEnabled()) checkAllCollisions();
 #endif
 }
 
@@ -412,8 +369,8 @@ void ofxMSAPhysics::load(uint frameNum) {
 #endif
 
 void ofxMSAPhysics::updateParticles() {
-	vector<ofxMSAParticle*>::iterator it = _particles.begin();
 	int num = 0;
+	vector<ofxMSAParticle*>::iterator it = _particles.begin();
 	while(it != _particles.end()) {
 		ofxMSAParticle* particle = *it;
 		if(particle->_isDead) {							// if particle is dead
@@ -427,8 +384,18 @@ void ofxMSAPhysics::updateParticles() {
 			if(params.doWorldEdges) {
 //				if(particle->isFree()) 
 					particle->checkWorldEdges();
-				particle->computeBinFlags();
 			}
+			
+			// find which sector particle is in
+			int i = ofMap(particle->getX(), params.worldMin.x, params.worldMax.x, 0, params.sectorCount.x, true);
+			int j = ofMap(particle->getY(), params.worldMin.y, params.worldMax.y, 0, params.sectorCount.y, true);
+			int k = ofMap(particle->getZ(), params.worldMin.z, params.worldMax.z, 0, params.sectorCount.z, true);
+
+			_sectors[i * params.sectorCount.y * params.sectorCount.x + j * params.sectorCount.x + k].addParticle(particle);
+			
+//			printf("sector for particle at %f, %f, %f is %i %i %i\n", particle->getX(), particle->getY(), particle->getZ(), i, j, k);
+//			for(int s=0; s<_sectors.size(); s++) _sectors[s].checkParticle(particle);
+			
 #ifdef MSAPHYSICS_USE_RECORDER
 			if(_replayMode == OFX_MSA_DATA_SAVE) _recorder.add(*particle);
 #endif
@@ -441,14 +408,10 @@ void ofxMSAPhysics::updateParticles() {
 void ofxMSAPhysics::updateConstraintsByType(vector<ofxMSAConstraint*> constraints) {
 }
 
-void ofxMSAPhysics::updateAllConstraints() {
+void ofxMSAPhysics::updateConstraints() {
 	// iterate all constraints and update
 	for (int i = 0; i < params.numIterations; i++) {
 		for(int i=0; i<OFX_MSA_CONSTRAINT_TYPE_COUNT; i++) {
-
-			// if doing collision constraints and collision is disabled skip them
-			if(i == OFX_MSA_CONSTRAINT_TYPE_COLLISION && !params.isCollisionEnabled) continue;
-
 			vector<ofxMSAConstraint*>::iterator it = _constraints[i].begin();
 			while(it != _constraints[i].end()) {
 				ofxMSAConstraint* constraint = *it;
@@ -484,6 +447,13 @@ ofxMSAPhysics*  ofxMSAPhysics::setReplayFilename(string f) {
 #endif
 
 
+void ofxMSAPhysics::checkAllCollisions() {
+	int s = _sectors.size();
+	for(int i=0; i<s; i++) {
+		_sectors[i].checkSectorCollisions();
+		_sectors[i].clear();
+	}
+}
 
 
 ofxMSAConstraint* ofxMSAPhysics::getConstraint(ofxMSAParticle *a, ofxMSAParticle *b, int constraintType) {

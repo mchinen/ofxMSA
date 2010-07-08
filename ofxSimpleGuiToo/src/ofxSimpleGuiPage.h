@@ -79,6 +79,10 @@ public:
 
 	void keyPressed(ofKeyEventArgs &e);
 	void keyReleased(ofKeyEventArgs &e);
+	
+	
+	vector <ofxSimpleGuiControl*>&	getControls();
+
 
 protected:
 	vector <ofxSimpleGuiControl*>	controls;

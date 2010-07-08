@@ -210,11 +210,11 @@ ofTexture &ofxOpenCLImage::getTexture() {
 }
 
 
-void ofxOpenCLImage::draw(int x, int y) {
+void ofxOpenCLImage::draw(float x, float y) {
 	texture->draw(x, y);
 }
 
-void ofxOpenCLImage::draw(int x, int y, int w, int h) {
+void ofxOpenCLImage::draw(float x, float y, float w, float h) {
 	texture->draw(x, y, w, h);
 }
 

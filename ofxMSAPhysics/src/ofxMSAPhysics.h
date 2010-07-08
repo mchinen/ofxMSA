@@ -51,11 +51,12 @@ fast inverse square root mentioned at
 #include "ofxMSAConstraint.h"
 #include "ofxMSASpring.h"
 #include "ofxMSAAttraction.h"
-#include "ofxMSACollision.h"
 
 #include "ofxMSAPhysicsUtils.h"
 #include "ofxMSAPhysicsParams.h"
 #include "ofxMSAPhysicsCallbacks.h"
+
+#include "ofxMSAPhysicsSector.h"
 
 #ifdef MSAPHYSICS_USE_RECORDER
 #include "ofxMSADataRecorder.h"
@@ -76,7 +77,6 @@ public:
 	ofxMSAParticle*		makeParticle(ofPoint pos, float m = 1.0f, float d = 1.0f);
 	ofxMSASpring*		makeSpring(ofxMSAParticle *a, ofxMSAParticle *b, float _strength, float _restLength);
 	ofxMSAAttraction*	makeAttraction(ofxMSAParticle *a, ofxMSAParticle *b, float _strength);
-	ofxMSACollision*	makeCollision(ofxMSAParticle *a, ofxMSAParticle *b);
 
 	// this method retains the particle, so you should release() it after adding (obj-c style)
 	ofxMSAParticle*		addParticle(ofxMSAParticle *p);
@@ -88,24 +88,11 @@ public:
 	ofxMSAConstraint*	getConstraint(uint i);			// generally you wouldn't use this but use the ones below
 	ofxMSASpring*		getSpring(uint i);
 	ofxMSAAttraction*	getAttraction(uint i);
-	ofxMSACollision*	getCollision(uint i);
 
 	uint				numberOfParticles();
-	uint				numberOfConstraints();		// all constraints: springs, attractions, collisions and user created
+	uint				numberOfConstraints();		// all constraints: springs, attractions and user created
 	uint				numberOfSprings();			// only springs
 	uint				numberOfAttractions();		// only attractions
-	uint				numberOfCollisions();		// only collisions
-
-	ofxMSAPhysics*		enableCollision();
-	ofxMSAPhysics*		disableCollision();
-	bool				isCollisionEnabled();
-	ofxMSAPhysics*		setCollisionBinSize(float f);		// set the size of a collision bin for each axis (should be > the largest particle)
-	ofxMSAPhysics*		setCollisionBinSize(ofPoint p);		// OR set the size of a collision bin for each axis (should be > the largest particle)
-    ofxMSAPhysics*      setCollisionBinCount(float f);      // OR set the number of bins in each axis
-    ofxMSAPhysics*      setCollisionBinCount(ofPoint p);    // OR set the number of bins in each axis
-
-	ofxMSAPhysics*		addToCollision(ofxMSAParticle* p);
-	ofxMSAPhysics*		removeFromCollision(ofxMSAParticle* p);
 
 	ofxMSAPhysics*		setDrag(float drag = 0.99);					// set the drag. 1: no drag at all, 0.9: quite a lot of drag, 0: particles can't even move
 	ofxMSAPhysics*		setGravity(float gy = 0);					// set gravity (y component only)
@@ -114,17 +101,24 @@ public:
 	ofxMSAPhysics*		setTimeStep(float timeStep);
 	ofxMSAPhysics*		setNumIterations(float numIterations = 20);	// default value
 
+	// for optimized collision, set world dimensions first
 	ofxMSAPhysics*		setWorldMin(ofPoint worldMin);
 	ofxMSAPhysics*		setWorldMax(ofPoint worldMax);
 	ofxMSAPhysics*		setWorldSize(ofPoint worldMin, ofPoint worldMax);
 	ofxMSAPhysics*		clearWorldSize();
 
+	// and then set sector size (or count)
+	ofxMSAPhysics*		enableCollision();
+	ofxMSAPhysics*		disableCollision();
+	bool				isCollisionEnabled();
+    ofxMSAPhysics*      setSectorCount(int count);		// set the number of sectors (will be equal in each axis)
+    ofxMSAPhysics*      setSectorCount(ofPoint vCount);	// set the number of sectors in each axis
+	
 	// preallocate buffers if you know how big they need to be (they grow automatically if need be)
 	ofxMSAPhysics*		setParticleCount(uint i);
 	ofxMSAPhysics*		setConstraintCount(uint i);
 	ofxMSAPhysics*		setSpringCount(uint i);
 	ofxMSAPhysics*		setAttractionCount(uint i);
-	ofxMSAPhysics*		setCollisionCount(uint i);
 
 
 	void clear();
@@ -140,13 +134,17 @@ public:
 protected:
 	vector<ofxMSAParticle*>		_particles;
 	vector<ofxMSAConstraint*>	_constraints[OFX_MSA_CONSTRAINT_TYPE_COUNT];
-
+	vector<ofxMSAPhysicsSector> _sectors;
+	
 	ofxMSAPhysicsParams			params;
 
 	void						updateParticles();
-	void						updateAllConstraints();
+	void						updateConstraints();
 	void						updateConstraintsByType(vector<ofxMSAConstraint*> constraints);
-	void                        updateWorldSize();
+//	void						updateWorldSize();
+	
+	
+	void						checkAllCollisions();
 
 	ofxMSAConstraint*			getConstraint(ofxMSAParticle *a, int constraintType);
 	ofxMSAConstraint*			getConstraint(ofxMSAParticle *a, ofxMSAParticle *b, int constraintType);

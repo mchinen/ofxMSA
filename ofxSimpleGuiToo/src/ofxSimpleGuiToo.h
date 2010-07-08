@@ -33,13 +33,16 @@
  *
  * ***********************************************************************/ 
 
-#ifndef OFX_SIMPLE_GUI_H
-#define OFX_SIMPLE_GUI_H
+#pragma once
 
 #include "ofMain.h"
 #include "ofxXmlSettings.h"
 
 #include "ofxSimpleGuiIncludes.h"
+
+#ifdef __OFXWEBSERVER__
+#include "ofxSimpleGuiTooWebService.h"
+#endif
 
 //#define	OFX_SIMPLEGUITOO_XML_NAME	"ofxSimpleGuiToo.xml"
 
@@ -100,7 +103,17 @@ public:
 	ofxSimpleGuiColorPicker		&addColorPicker(string name, float *values);
 
 	void					draw();
+	
+	
+	
+	vector <ofxSimpleGuiPage*>&		getPages();
+	ofxSimpleGuiControl *getControlByName(string name);
 
+#ifdef __OFXWEBSERVER__
+	ofxSimpleGuiTooWebService		webService;
+#endif	
+	
+	
 	
 protected:
 	bool							doAutoSave;
@@ -136,8 +149,6 @@ protected:
 	void keyPressed(ofKeyEventArgs &e);
 	void keyReleased(ofKeyEventArgs &e);
 };
-
-#endif
 
 
 extern ofxSimpleGuiToo gui;
