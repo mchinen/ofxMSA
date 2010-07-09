@@ -17,7 +17,7 @@ public:
 	void loadFromXML(ofxXmlSettings &XML);
 	void saveToXML(ofxXmlSettings &XML);
 	float getValue(int i);
-	void set(float f, int i);
+	void setValue(float f, int i);
 	void updateSlider();	
 	void onPress(int x, int y, int button);
 	void onDragOver(int x, int y, int button);

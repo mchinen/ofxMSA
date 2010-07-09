@@ -12,7 +12,7 @@ public:
 	void setup();
 	void loadFromXML(ofxXmlSettings &XML);
 	void saveToXML(ofxXmlSettings &XML);
-	void set(float x, float y);
+	void setValue(float x, float y);
 	void setMin(float x, float y);
 	void setMax(float x, float y);
 	void onPress(int x, int y, int button);

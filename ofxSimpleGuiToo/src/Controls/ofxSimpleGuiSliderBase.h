@@ -37,7 +37,7 @@ public:
 	}
 
 	void loadFromXML(ofxXmlSettings &XML) {
-		set((Type)XML.getValue("controls:" + controlType + "_" + key + ":value", 0.0f));
+		setValue((Type)XML.getValue("controls:" + controlType + "_" + key + ":value", 0.0f));
 	}
 
 	void saveToXML(ofxXmlSettings &XML) {
@@ -55,7 +55,7 @@ public:
 	}
 
 
-	void set(Type f) {
+	void setValue(Type f) {
 		if(f < min) f = min;
 		else if(f > max) f = max;
 		(*value) = f;

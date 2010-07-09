@@ -15,7 +15,7 @@ public:
 	void loadFromXML(ofxXmlSettings &XML);
 	void saveToXML(ofxXmlSettings &XML);
 	bool getValue();
-	void set(bool b);
+	void setValue(bool b);
 	void toggle();
 	void onPress(int x, int y, int button);
 	void onRelease(int x, int y, int button);

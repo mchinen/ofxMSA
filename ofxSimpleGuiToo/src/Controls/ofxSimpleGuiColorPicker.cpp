@@ -28,7 +28,7 @@ void ofxSimpleGuiColorPicker::setup() {
 
 void ofxSimpleGuiColorPicker::loadFromXML(ofxXmlSettings &XML) {
 	for(int i=0; i<4; i++) {
-		set(XML.getValue("controls:" + controlType + "_" + key + ":values_" + ofToString(i), 0.0f), i);
+		setValue(XML.getValue("controls:" + controlType + "_" + key + ":values_" + ofToString(i), 0.0f), i);
 	}
 }
 
@@ -49,7 +49,7 @@ float ofxSimpleGuiColorPicker::getValue(int i) {
 }
 
 
-void ofxSimpleGuiColorPicker::set(float f, int i) {
+void ofxSimpleGuiColorPicker::setValue(float f, int i) {
 	if(f < min) f = min;
 	else if(f > max) f = max;
 	values[i] = f;
@@ -67,7 +67,7 @@ void ofxSimpleGuiColorPicker::updateSlider() {
 	}
 	else {
 		pct[i] = getMouseX() - x;
-		set(ofMap(pct[i], 0.0, (float)width, 0, max), i);
+		setValue(ofMap(pct[i], 0.0, (float)width, 0, max), i);
 	}
 }
 

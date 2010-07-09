@@ -31,7 +31,7 @@ void ofxSimpleGuiSlider2d::saveToXML(ofxXmlSettings &XML) {
 }
 
 
-void ofxSimpleGuiSlider2d::set(float x, float y) {
+void ofxSimpleGuiSlider2d::setValue(float x, float y) {
 	(*value).x = x;
 	(*value).y = y;
 }

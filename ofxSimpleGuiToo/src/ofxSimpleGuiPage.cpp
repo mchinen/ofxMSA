@@ -221,7 +221,7 @@ ofxSimpleGuiColorPicker &ofxSimpleGuiPage::addColorPicker(string name, float *va
 }
 
 
-ofxSimpleGuiComboBox &ofxSimpleGuiPage::addComboBox(string name, int &choice_out, int numChoices, const char** choiceTitles) {
+ofxSimpleGuiComboBox &ofxSimpleGuiPage::addComboBox(string name, int &choice_out, int numChoices, string* choiceTitles) {
 	return (ofxSimpleGuiComboBox &)addControl(* new ofxSimpleGuiComboBox(name, choice_out, numChoices, this, choiceTitles));
 }
 

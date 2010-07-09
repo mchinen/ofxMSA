@@ -37,7 +37,7 @@ float	myFloat7;
 float	myFloat8;
 float	myFloat9;
 
-float	myColors[4];
+ofColor	aColor;
 
 
 // for demonstrating adding any drawable object (that extends ofBaseDraw);
@@ -65,9 +65,9 @@ void testApp::setup(){
 	gui.addSlider("myFloat1", myFloat1, 0.0, 1); 
 	gui.addSlider("myInt1", myInt1, 5, 10); 
 	gui.addToggle("myBool1", myBool1);
-   gui.addComboBox("box1", box1, 12, NULL);
+	gui.addComboBox("box1", box1, 12, NULL);
 	gui.addButton("Randomize Background", randomizeButton);
-	gui.addColorPicker("BG Color", myColors);
+	gui.addColorPicker("BG Color", &aColor.r);
 	
 	
 	// start a new group
@@ -75,10 +75,10 @@ void testApp::setup(){
 	gui.addSlider("myFloat2", myFloat2, 0.0, 1);
 	gui.addSlider("myInt2", myInt2, 3, 8);
 	gui.addToggle("myBool2", myBool2);	
-   const char* titleArray[] = {"Option1", "Better", "Best"};
-   gui.addComboBox("box2", box2, 3,  titleArray);
+	string titleArray[] = {"Lame", "Alright", "Better", "Best"};
+	gui.addComboBox("box2", box2, 4,  titleArray);
 	gui.addFPSCounter();
-
+	
 	// new group, this time separate into it's own column
 	gui.addTitle("Yes one more group").setNewColumn(true);
 	gui.addToggle("myBool4", myBool4);	
@@ -99,7 +99,7 @@ void testApp::setup(){
 	gui.addSlider("myFloat7", myFloat7, 0.0, 1);
 	gui.addSlider("myFloat8", myFloat8, 0.0, 0.1);
 	gui.addSlider("myInt9", myInt9, 0, 10); 
-
+	
 	gui.addTitle("Final group?");
 	gui.addToggle("myBool5", myBool5);	
 	gui.addToggle("myBool6", myBool6);	
@@ -127,7 +127,9 @@ void testApp::setup(){
 void testApp::update(){
 	if(randomizeButton) {
 		randomizeButton = false;
-		ofBackground(ofRandom(0, 255), ofRandom(0, 255), ofRandom(0, 255));
+		aColor.r = ofRandomuf();
+		aColor.g = ofRandomuf();
+		aColor.b = ofRandomuf();
 	}
 	
 	
@@ -143,7 +145,7 @@ void testApp::update(){
 
 //--------------------------------------------------------------
 void testApp::draw(){
-	ofBackground(myColors[0] * 255.0f, myColors[1] * 255.0f, myColors[2] * 255.0f);
+	ofBackground(aColor.r * 255, aColor.g * 255.0f, aColor.b * 255.0);
 	
 	gui.draw();
 }
@@ -182,5 +184,5 @@ void testApp::mousePressed(int x, int y, int button){
 
 //--------------------------------------------------------------
 void testApp::mouseReleased(){
-
+	
 }

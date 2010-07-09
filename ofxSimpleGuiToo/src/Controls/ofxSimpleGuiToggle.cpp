@@ -20,7 +20,7 @@ void ofxSimpleGuiToggle::setup() {
 }
 
 void ofxSimpleGuiToggle::loadFromXML(ofxXmlSettings &XML) {
-	set(XML.getValue("controls:" + controlType + "_" + key + ":value", 0));
+	setValue(XML.getValue("controls:" + controlType + "_" + key + ":value", 0));
 }
 
 void ofxSimpleGuiToggle::saveToXML(ofxXmlSettings &XML) {
@@ -36,7 +36,7 @@ bool ofxSimpleGuiToggle::getValue() {
 	return (*value);
 }
 
-void ofxSimpleGuiToggle::set(bool b) {
+void ofxSimpleGuiToggle::setValue(bool b) {
 	(*value) = b;
 }
 
@@ -45,12 +45,12 @@ void ofxSimpleGuiToggle::toggle() {
 }
 
 void ofxSimpleGuiToggle::onPress(int x, int y, int button) {
-	if(momentary) set(true);
+	if(momentary) setValue(true);
 	else toggle();
 }
 
 void ofxSimpleGuiToggle::onRelease(int x, int y, int button) {
-	if(momentary) set(false);
+	if(momentary) setValue(false);
 }
 
 void ofxSimpleGuiToggle::keyPressed( int key ) {

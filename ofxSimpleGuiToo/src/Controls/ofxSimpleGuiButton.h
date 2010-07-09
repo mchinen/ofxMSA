@@ -16,7 +16,7 @@ public:
 	void saveToXML(ofxXmlSettings &XML);
 	void keyPressed( int key );
 	bool getValue();
-	void set(bool b);
+	void setValue(bool b);
 	void toggle();
 	void setToggleMode(bool b);
 	void onPress(int x, int y, int button);

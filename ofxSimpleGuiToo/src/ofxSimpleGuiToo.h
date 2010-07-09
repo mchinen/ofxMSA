@@ -99,7 +99,7 @@ public:
 	ofxSimpleGuiTitle			&addTitle(string name="", float height = 0);
 	ofxSimpleGuiToggle			&addToggle(string name, bool &value);
 	ofxSimpleGuiColorPicker		&addColorPicker(string name, float *values);
-   ofxSimpleGuiComboBox        &addComboBox(string name, int &value, int numChoices, const char** choiceTitles=NULL);
+   ofxSimpleGuiComboBox        &addComboBox(string name, int &value, int numChoices, string* choiceTitles=NULL);
 
 
 	void						draw();
