@@ -24,6 +24,9 @@ int		myInt7;
 int		myInt8;
 int		myInt9;
 
+int      box1;
+int      box2;
+
 float	myFloat1;
 float	myFloat2;
 float	myFloat3;
@@ -62,6 +65,7 @@ void testApp::setup(){
 	gui.addSlider("myFloat1", myFloat1, 0.0, 1); 
 	gui.addSlider("myInt1", myInt1, 5, 10); 
 	gui.addToggle("myBool1", myBool1);
+   gui.addComboBox("box1", box1, 12, NULL);
 	gui.addButton("Randomize Background", randomizeButton);
 	gui.addColorPicker("BG Color", myColors);
 	
@@ -71,6 +75,8 @@ void testApp::setup(){
 	gui.addSlider("myFloat2", myFloat2, 0.0, 1);
 	gui.addSlider("myInt2", myInt2, 3, 8);
 	gui.addToggle("myBool2", myBool2);	
+   const char* titleArray[] = {"Option1", "Better", "Best"};
+   gui.addComboBox("box2", box2, 3,  titleArray);
 	gui.addFPSCounter();
 
 	// new group, this time separate into it's own column
