@@ -47,6 +47,7 @@ ofxSimpleGuiConfig::ofxSimpleGuiConfig() {
 	toggleHeight		= titleHeight;
 	buttonHeight		= titleHeight;
 	slider2DTextHeight	= titleHeight * 1.5;
+   comboBoxHeight    = 15;
 	
 	
 	padding.set			(titleHeight/2, 10);

@@ -66,7 +66,7 @@ public:
 	int  getMouseY();					// returns mouse Y (in screen coordinates)
 	int  getLastMouseButton();			// returns last mouse button to have activity
 
-	bool hitTest(int tx, int ty);		// returns true if given (x, y) coordinates (in screen space) are over the object (based on position and size)
+	virtual bool hitTest(int tx, int ty);		// returns true if given (x, y) coordinates (in screen space) are over the object (based on position and size)
 
 	void killMe();						// if your object is a pointer, and you are done with it, call this
 
