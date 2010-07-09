@@ -56,8 +56,9 @@ void ofxSimpleGuiComboBox::setChoiceTitle(int index, const char* title) {
    if(index < 0 || index >= m_choices.size())
       return;
 
-   int offset;
-   offset = strlen(title) - kMaxChoiceStringLen;
+   int offset = 0;
+   if(title)   
+      offset = strlen(title) - kMaxChoiceStringLen;
 
    char* titlestring = (char*)malloc(title?strlen(title + (offset > 0? offset : 0)):10);
    if(m_choices[index])
