@@ -344,6 +344,11 @@ ofxSimpleGuiComboBox &ofxSimpleGuiToo::addComboBox(string name, int &value, int 
 	return pages[currentPageIndex]->addComboBox(name, value, numChoices, choiceTitles);
 }
 
+ofxSimpleGuiTextInput &ofxSimpleGuiToo::addTextInput(string name, string &value)  {
+	if(!config) setup();
+	return pages[currentPageIndex]->addTextInput(name, value);
+}
+
 
 //void ofxSimpleGuiToo::setup(ofEventArgs &e) {
 void ofxSimpleGuiToo::update(ofEventArgs &e) {

@@ -48,5 +48,6 @@
 #include "ofxSimpleGuiTitle.h"
 #include "ofxSimpleGuiColorPicker.h"
 #include "ofxSimpleGuiComboBox.h"
+#include "ofxSimpleGuiTextInput.h"
 //#include "ofxSimpleGuiOption.h"
 //#include "ofxSimpleGuiOptionGroup.h"

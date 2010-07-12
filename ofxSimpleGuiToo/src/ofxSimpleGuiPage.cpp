@@ -225,7 +225,9 @@ ofxSimpleGuiComboBox &ofxSimpleGuiPage::addComboBox(string name, int &choice_out
 	return (ofxSimpleGuiComboBox &)addControl(* new ofxSimpleGuiComboBox(name, choice_out, numChoices, this, choiceTitles));
 }
 
-
+ofxSimpleGuiTextInput &ofxSimpleGuiPage::addTextInput(string name, string &value) {
+	return (ofxSimpleGuiTextInput &)addControl(* new ofxSimpleGuiTextInput(name, value));
+}
 
 
 void ofxSimpleGuiPage::update(ofEventArgs &e) {
